@@ -27,12 +27,7 @@ pipeline {
             }
         }
 
-        stage('Install Docker using Ansible') {
-            steps {
-                sh 'ansible-playbook docker.yaml'
-            }
-        }
-
+        
         stage('Build Docker Image') {
             steps {
                 // copy your actual WAR into a flat name for the Docker context
