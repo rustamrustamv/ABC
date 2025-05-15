@@ -60,22 +60,17 @@ pipeline {
 		}
 
 
-        stage('Deploy as Container') {
-            steps {
-                sh "docker run -d -P rustamrustamov/abc_tech:${BUILD_NUMBER}"
-            }
-        }
-		
-		
-		
-		stage('Deploy to Kubernetes') {
+        stage('Deploy to Kubernetes') {
 			steps {
 				withKubeConfig(credentialsId: 'kubeconfig') {
-					sh 'kubectl apply -f deployment.yaml'
-					sh 'kubectl apply -f service.yaml'
+					// Ensure we’re in the workspace root
+					dir("${WORKSPACE}") {
+						// Apply your manifests by referencing them explicitly
+						sh 'kubectl apply -f deployment.yaml'
+						sh 'kubectl apply -f service.yaml'
+					}
 				}
 			}
 		}
-
-    }
+	}
 }
