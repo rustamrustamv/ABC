@@ -28,18 +28,23 @@ pipeline {
         }
 
         
-        stage('Build Docker Image') {
+         stage('Build Docker Image') {
 			steps {
-        // 1) Copy the built WAR from target/ into abc.war at the root of the workspace
-        sh 'cp /var/lib/jenkins/workspace/${JOB_NAME}/target/ABCtechnologies-1.0.war /var/lib/jenkins/workspace/${JOB_NAME}/abc.war'
-        
-        // 2) Build the Docker image, using this workspace 
-        sh 'docker build -t abc_tech:${BUILD_NUMBER} /var/lib/jenkins/workspace/${JOB_NAME}'
-        
-        // 3) Tag it for your Docker Hub repo
-        sh 'docker tag abc_tech:${BUILD_NUMBER} rustamrustamov/abc_tech:${BUILD_NUMBER}'
+				sh """
+					# Copy the built WAR 
+					cp \"${WORKSPACE}/target/ABCtechnologies-1.0.war\" \"${WORKSPACE}/abc.war\"
+
+					# Build the Docker image from the workspace context
+					docker build -t abc_tech:${BUILD_NUMBER} \"${WORKSPACE}\"
+
+					# Tag the image for Docker Hub
+					docker tag abc_tech:${BUILD_NUMBER} rustamrustamov/abc_tech:${BUILD_NUMBER}
+				"""
 			}
 		}
+
+
+
 
 
         stage('Push Docker Image') {
