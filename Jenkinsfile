@@ -48,12 +48,17 @@ pipeline {
 
 
         stage('Push Docker Image') {
-            steps {
-                withDockerRegistry([ credentialsId: 'dockerhub', url: '' ]) {
-                    sh "docker push rustamrustamov/abc_tech:${BUILD_NUMBER}"
-                }
-            }
-        }
+			steps {
+				withDockerRegistry([ credentialsId: 'dockerhub', url: '' ]) {
+					// Push the build-number tag
+					sh "docker push rustamrustamov/abc_tech:${BUILD_NUMBER}"
+					// Also push latest
+					sh "docker tag rustamrustamov/abc_tech:${BUILD_NUMBER} rustamrustamov/abc_tech:latest"
+					sh "docker push rustamrustamov/abc_tech:latest"
+				}
+			}
+		}
+
 
         stage('Deploy as Container') {
             steps {
