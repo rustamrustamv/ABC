@@ -6,7 +6,7 @@ pipeline {
             steps {
                 // point at your GitHub repo
                 git url: 'https://github.com/rustamrustamv/ABC.git', 
-				credentialsId: 'github-ssh',
+				credentialsId: 'github-creds',
 				branch: 'main'
             }
         }
