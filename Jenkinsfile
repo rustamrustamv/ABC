@@ -5,7 +5,9 @@ pipeline {
         stage('Code Checkout') {
             steps {
                 // point at your GitHub repo
-                git url: 'https://github.com/rustamrustamv/ABC.git', branch: 'main'
+                git url: 'https://github.com/rustamrustamv/ABC.git', 
+				credentialsId: 'github-ssh',
+				branch: 'main'
             }
         }
 
